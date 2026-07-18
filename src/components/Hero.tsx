@@ -45,7 +45,7 @@ export default function Hero() {
           fill
           priority
           sizes="100vw"
-          className="object-cover object-[30%_50%] [filter:contrast(1.08)_saturate(1.06)_brightness(1.04)]"
+          className="object-cover object-[35%_50%] lg:object-left [filter:contrast(1.08)_saturate(1.06)_brightness(1.04)]"
         />
         {/* Fotoğraf önceden karartılmış olduğundan kaplamalar hafif tutuldu */}
         <div className="absolute inset-0 bg-gradient-to-b from-graphite/45 via-graphite/15 to-graphite/85" />

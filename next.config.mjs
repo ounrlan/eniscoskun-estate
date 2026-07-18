@@ -11,7 +11,7 @@ const nextConfig = {
         output: "export",
         basePath: "/eniscoskun-estate",
         assetPrefix: "/eniscoskun-estate",
-        images: { unoptimized: true },
+        images: { loader: "custom", loaderFile: "./image-loader.mjs" },
       }
     : {
         images: {

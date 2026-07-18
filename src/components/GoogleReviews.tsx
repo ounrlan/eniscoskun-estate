@@ -42,10 +42,74 @@ function Stars({ rating }: { rating: number }) {
   );
 }
 
+type ReviewItem = {
+  author: string;
+  rating: number;
+  text: string;
+  relativeTime: string;
+};
+
+function ReviewCard({ r }: { r: ReviewItem }) {
+  return (
+    <figure className="card-still flex h-full w-[340px] shrink-0 flex-col p-7 sm:w-[420px]">
+      <div className="mb-5 flex items-center justify-between">
+        <Stars rating={r.rating} />
+        <GoogleG size={18} />
+      </div>
+      <blockquote className="flex-1 text-sm leading-relaxed text-slate">
+        &ldquo;{r.text}&rdquo;
+      </blockquote>
+      <figcaption className="mt-6 flex items-center gap-3 border-t border-mist pt-5">
+        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gold-pale font-display text-sm font-semibold text-gold-deep">
+          {r.author.charAt(0).toUpperCase()}
+        </span>
+        <span>
+          <span className="block text-sm font-medium text-ink">{r.author}</span>
+          <span className="block text-xs text-ash">{r.relativeTime}</span>
+        </span>
+      </figcaption>
+    </figure>
+  );
+}
+
+function RatingCard({
+  rating,
+  count,
+  profileUrl,
+}: {
+  rating: number;
+  count: number;
+  profileUrl: string;
+}) {
+  return (
+    <a
+      href={profileUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="card-still flex h-full w-[300px] shrink-0 flex-col items-center justify-center gap-4 p-7 text-center sm:w-[340px]"
+    >
+      <GoogleG size={44} />
+      <span className="flex items-center gap-3">
+        <span className="font-display text-5xl font-semibold text-ink">
+          {rating.toFixed(1).replace(".", ",")}
+        </span>
+        <Stars rating={rating} />
+      </span>
+      <span className="text-sm text-ash">
+        Google&apos;da <span className="font-semibold text-ink">{count}</span>{" "}
+        değerlendirme
+      </span>
+      <span className="mt-1 inline-flex items-center gap-1 text-sm font-medium text-gold-deep">
+        Profili görüntüle <ArrowUpRight size={14} />
+      </span>
+    </a>
+  );
+}
+
 export default async function GoogleReviews() {
   const live = await getGoogleReviews();
 
-  const reviews =
+  const reviews: ReviewItem[] =
     live?.reviews ??
     TESTIMONIALS.map((t) => ({
       author: t.name,
@@ -58,6 +122,22 @@ export default async function GoogleReviews() {
   const writeUrl = live?.writeReviewUri ?? GOOGLE.writeReviewUrl;
   const rating = live?.rating ?? GOOGLE.rating;
   const count = live?.count ?? GOOGLE.count;
+
+  // Akan şerit içeriği: yorum kartları + Google puan kartı (kesintisiz
+  // döngü için iki kez basılır)
+  const strip = (keyPrefix: string) => (
+    <>
+      {reviews.map((r, i) => (
+        <ReviewCard key={`${keyPrefix}-r-${i}`} r={r} />
+      ))}
+      <RatingCard
+        key={`${keyPrefix}-rating`}
+        rating={rating}
+        count={count}
+        profileUrl={profileUrl}
+      />
+    </>
+  );
 
   return (
     <section
@@ -90,37 +170,20 @@ export default async function GoogleReviews() {
             </div>
           </Reveal>
         </div>
+      </div>
 
-        <div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-2">
-          {reviews.map((r, i) => (
-            <Reveal key={r.author + i} delay={i * 0.1}>
-              <figure className="card-still flex h-full flex-col p-7">
-                <div className="mb-5 flex items-center justify-between">
-                  <Stars rating={r.rating} />
-                  <GoogleG size={18} />
-                </div>
-                <blockquote className="flex-1 text-sm leading-relaxed text-slate">
-                  &ldquo;{r.text}&rdquo;
-                </blockquote>
-                <figcaption className="mt-6 flex items-center gap-3 border-t border-mist pt-5">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gold-pale font-display text-sm font-semibold text-gold-deep">
-                    {r.author.charAt(0).toUpperCase()}
-                  </span>
-                  <span>
-                    <span className="block text-sm font-medium text-ink">
-                      {r.author}
-                    </span>
-                    <span className="block text-xs text-ash">
-                      {r.relativeTime}
-                    </span>
-                  </span>
-                </figcaption>
-              </figure>
-            </Reveal>
-          ))}
+      {/* Otomatik akan yorum şeridi — üzerine gelince duraklar */}
+      <div className="relative">
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-cloud to-transparent sm:w-28" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-cloud to-transparent sm:w-28" />
+        <div className="flex w-max animate-marquee-reviews items-stretch gap-6 pr-6">
+          {strip("a")}
+          {strip("b")}
         </div>
+      </div>
 
-        <Reveal className="mt-12 flex flex-wrap items-center justify-center gap-4">
+      <div className="container-luxe">
+        <Reveal className="mt-14 flex flex-wrap items-center justify-center gap-4">
           <a
             href={writeUrl}
             target="_blank"

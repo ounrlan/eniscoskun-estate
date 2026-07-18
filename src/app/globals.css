@@ -151,3 +151,11 @@ body {
 .animate-marquee:hover {
   animation-play-state: paused;
 }
+
+/* Yorum şeridi: okunabilirlik için daha yavaş akar, üzerine gelince durur */
+.animate-marquee-reviews {
+  animation: marquee 38s linear infinite;
+}
+.animate-marquee-reviews:hover {
+  animation-play-state: paused;
+}

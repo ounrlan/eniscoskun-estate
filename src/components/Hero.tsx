@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, ArrowDown, Star, MapPin } from "lucide-react";
 import { GOOGLE } from "@/data/site";
 
-const HERO_IMAGE = "/ilanlar/1322464141.jpg";
+const HERO_IMAGE = "/ofis.webp";
 
 const containerStagger = {
   hidden: {},
@@ -41,14 +41,15 @@ export default function Hero() {
       >
         <Image
           src={HERO_IMAGE}
-          alt="Ankara Çankaya'da modern rezidans kuleleri"
+          alt="Enis Coşkun Gayrimenkul Eryaman ofisi — resepsiyon"
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center"
+          className="object-cover object-[30%_50%] [filter:contrast(1.08)_saturate(1.06)_brightness(1.04)]"
         />
-        <div className="absolute inset-0 bg-hero-vignette" />
-        <div className="absolute inset-0 bg-gradient-to-r from-graphite via-graphite/85 to-graphite/30" />
+        {/* Fotoğraf önceden karartılmış olduğundan kaplamalar hafif tutuldu */}
+        <div className="absolute inset-0 bg-gradient-to-b from-graphite/45 via-graphite/15 to-graphite/85" />
+        <div className="absolute inset-0 bg-gradient-to-r from-graphite/80 via-graphite/35 to-transparent" />
       </motion.div>
 
       <motion.div
